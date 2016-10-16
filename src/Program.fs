@@ -2,6 +2,8 @@
 
 open System
 
+type RepoId = string * string
+
 type Command =
   | List
 
@@ -12,14 +14,17 @@ let parseCommand (command: string) =
   | "list" -> List
   | _ -> raise (InvalidCommandException command)
 
-let getRemoteUrl localPath =
-  // TODO: Actually do this...
-  "https://github.com/awseward/ghi"
+let getRepoId localPath =
+  let id : RepoId = "awseward", "ghi"
+  id
 
 let executeCommand args command =
   match command with
   | List ->
     printfn "TODO: Implement list %A" args
+    let owner, repo = getRepoId "TODO"
+    printfn "https://api.github.com/repos/%s/%s/issues" owner repo
+
     1
 
 [<EntryPoint>]
@@ -27,6 +32,7 @@ let main argv =
   match argv with
   | [| |] ->
     printfn "Usage: TODO"
+
     1
   | _ ->
     try
@@ -37,4 +43,5 @@ let main argv =
     with
     | InvalidCommandException cmd ->
         printfn "Error: Command `%s` does not exist" cmd
+
         1
